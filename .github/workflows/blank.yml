@@ -1,0 +1,33 @@
+name: Merge genx_test into geny_test
+
+on:
+  push:
+    branches:
+      - genx_test
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout geny_test branch
+        uses: actions/checkout@v4
+        with:
+          ref: geny_test
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Set up Git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch all remote branches
+        run: git fetch origin
+
+      - name: Merge genx_test into geny_test
+        id: merge
+        run: |
+          git merge origin/genx_test || (echo "Merge conflict detected! Please resolve manually." && exit 1)
+
+      - name: Push changes if merge succeeds
+        if: success()
+        run: git push origin geny_test
