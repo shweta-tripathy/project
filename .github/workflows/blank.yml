@@ -1,9 +1,8 @@
 name: Merge genx_test into geny_test
 
 on:
-  push:
-    branches:
-      - genx_test
+  workflow_dispatch
+
 
 jobs:
   merge:
